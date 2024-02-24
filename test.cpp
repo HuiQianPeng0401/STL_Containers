@@ -12,6 +12,7 @@
 #include <stack>
 #include "stack.h"
 #include <queue>
+#include "rb_tree.h"
 #include "queue.h"
 
 using std::cin;
@@ -135,6 +136,11 @@ void queue_test()
 
 
 int main() {
-  phq::test::queue_test::queue_test();
-  return 0;
+  phq::rb_tree<int, std::less<int>> r;
+  for (int i = 1000; i >= 0; --i) {
+    r.insert_unique(i);
+  }
+  for (auto it = r.begin(); it != r.end(); ++it) {
+    cout << *it << " ";
+  }
 }
