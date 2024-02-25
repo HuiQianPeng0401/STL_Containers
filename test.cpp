@@ -13,6 +13,8 @@
 #include "stack.h"
 #include <queue>
 #include "rb_tree.h"
+#include <set>
+#include "set.h"
 #include "queue.h"
 
 using std::cin;
@@ -26,109 +28,154 @@ namespace phq
 {
 namespace test
 {
-namespace queue_test
+namespace set_test
 {
 
-void queue_print(phq::queue<int> q)
-{
-  while (!q.empty())
-  {
-    std::cout << " " << q.front();
-    q.pop();
-  }
-  std::cout << std::endl;
-}
-
-
-
-//  queue 的遍历输出
-#define QUEUE_COUT(q) do {                       \
-    std::string q_name = #q;                     \
-    std::cout << " " << q_name << " :";          \
-    queue_print(q);                              \
-} while(0)
-
-// priority_queue 的遍历输出
-#define P_QUEUE_COUT(p) do {                     \
-    std::string p_name = #p;                     \
-    std::cout << " " << p_name << " :";          \
-    p_queue_print(p);                            \
-} while(0)
-
-#define QUEUE_FUN_AFTER(con, fun) do {           \
-  std::string fun_name = #fun;                   \
-  std::cout << " After " << fun_name << " :\n";  \
-  fun;                                           \
-  QUEUE_COUT(con);                               \
-} while(0)
-
-#define P_QUEUE_FUN_AFTER(con, fun) do {         \
-  std::string fun_name = #fun;                   \
-  std::cout << " After " << fun_name << " :\n";  \
-  fun;                                           \
-  P_QUEUE_COUT(con);                             \
-} while(0)
-
-void queue_test()
+void set_test()
 {
   std::cout << "[===============================================================]" << std::endl;
-  std::cout << "[----------------- Run container test : queue ------------------]" << std::endl;
+  std::cout << "[------------------ Run container test : set -------------------]" << std::endl;
   std::cout << "[-------------------------- API test ---------------------------]" << std::endl;
-  int a[] = { 1,2,3,4,5 };
-  phq::deque<int> d1(5);
-  phq::queue<int> q1;
-  phq::queue<int> q2(5);
-  phq::queue<int> q3(5, 1);
-  phq::queue<int> q4(a, a + 5);
-  phq::queue<int> q5(d1);
-  phq::queue<int> q6(std::move(d1));
-  phq::queue<int> q7(q2);
-  phq::queue<int> q8(std::move(q2));
-  phq::queue<int> q9;
-  q9 = q3;
-  phq::queue<int> q10;
-  q10 = std::move(q3);
-  phq::queue<int> q11{ 1,2,3,4,5 };
-  phq::queue<int> q12;
-  q12 = { 1,2,3,4,5 };
+  int a[] = { 5,4,3,2,1 };
+  phq::set<int> s1;
+  phq::set<int, std::greater<int>> s2;
+  phq::set<int> s3(a, a + 5);
+  phq::set<int> s4(a, a + 5);
+  phq::set<int> s5(s3);
+  phq::set<int> s6(std::move(s3));
+  phq::set<int> s7;
+  s7 = s4;
+  phq::set<int> s8;
+  s8 = std::move(s4);
+  phq::set<int> s9{ 1,2,3,4,5 };
+  phq::set<int> s10;
+  s10 = { 1,2,3,4,5 };
 
-  QUEUE_FUN_AFTER(q1, q1.push(1));
-  QUEUE_FUN_AFTER(q1, q1.push(2));
-  QUEUE_FUN_AFTER(q1, q1.push(3));
-  QUEUE_FUN_AFTER(q1, q1.pop());
-  QUEUE_FUN_AFTER(q1, q1.emplace(4));
-  QUEUE_FUN_AFTER(q1, q1.emplace(5));
-  std::cout << std::boolalpha;
-  FUN_VALUE(q1.empty());
-  std::cout << std::noboolalpha;
-  FUN_VALUE(q1.size());
-  FUN_VALUE(q1.front());
-  FUN_VALUE(q1.back());
-  while (!q1.empty())
+  for (int i = 5; i > 0; --i)
   {
-    QUEUE_FUN_AFTER(q1, q1.pop());
+    FUN_AFTER(s1, s1.emplace(i));
   }
-  QUEUE_FUN_AFTER(q1, q1.swap(q4));
+  FUN_AFTER(s1, s1.emplace_hint(s1.begin(), 0));
+  FUN_AFTER(s1, s1.erase(s1.begin()));
+  FUN_AFTER(s1, s1.erase(0));
+  FUN_AFTER(s1, s1.erase(1));
+  FUN_AFTER(s1, s1.erase(s1.begin(), s1.end()));
+  for (int i = 0; i < 5; ++i)
+  {
+    FUN_AFTER(s1, s1.insert(i));
+  }
+  FUN_AFTER(s1, s1.insert(a, a + 5));
+  FUN_AFTER(s1, s1.insert(5));
+  FUN_AFTER(s1, s1.insert(s1.end(), 5));
+  FUN_VALUE(s1.count(5));
+  FUN_VALUE(*s1.find(3));
+  FUN_VALUE(*s1.lower_bound(3));
+  FUN_VALUE(*s1.upper_bound(3));
+  auto first = *s1.equal_range(3).first;
+  auto second = *s1.equal_range(3).second;
+  std::cout << " s1.equal_range(3) : from " << first << " to " << second << std::endl;
+  FUN_AFTER(s1, s1.erase(s1.begin()));
+  FUN_AFTER(s1, s1.erase(1));
+  FUN_AFTER(s1, s1.erase(s1.begin(), s1.find(3)));
+  FUN_AFTER(s1, s1.clear());
+  FUN_AFTER(s1, s1.swap(s5));
+  FUN_VALUE(*s1.begin());
+  FUN_VALUE(*s1.rbegin());
+  std::cout << std::boolalpha;
+  FUN_VALUE(s1.empty());
+  std::cout << std::noboolalpha;
+  FUN_VALUE(s1.size());
+  FUN_VALUE(s1.max_size());
   PASSED;
 #if PERFORMANCE_TEST_ON
   std::cout << "[--------------------- Performance Testing ---------------------]" << std::endl;
   std::cout << "|---------------------|-------------|-------------|-------------|" << std::endl;
-  std::cout << "|         push        |";
+  std::cout << "|       emplace       |";
 #if LARGER_TEST_DATA_ON
-  CON_TEST_P1(queue<int>, push, rand(), SCALE_LL(LEN1), SCALE_LL(LEN2), SCALE_LL(LEN3));
+  CON_TEST_P1(set<int>, emplace, rand(), SCALE_L(LEN1), SCALE_L(LEN2), SCALE_L(LEN3));
 #else
-  CON_TEST_P1(queue<int>, push, rand(), SCALE_L(LEN1), SCALE_L(LEN2), SCALE_L(LEN3));
+  CON_TEST_P1(set<int>, emplace, rand(), SCALE_M(LEN1), SCALE_M(LEN2), SCALE_M(LEN3));
 #endif
   std::cout << std::endl;
   std::cout << "|---------------------|-------------|-------------|-------------|" << std::endl;
   PASSED;
 #endif
-  std::cout << "[----------------- End container test : queue ------------------]" << std::endl;
+  std::cout << "[------------------ End container test : set -------------------]" << std::endl;
 }
 
+void multiset_test()
+{
+  std::cout << "[===============================================================]" << std::endl;
+  std::cout << "[---------------- Run container test : multiset ----------------]" << std::endl;
+  std::cout << "[-------------------------- API test ---------------------------]" << std::endl;
+  int a[] = { 5,4,3,2,1 };
+  phq::multiset<int> s1;
+  phq::multiset<int, std::greater<int>> s2;
+  phq::multiset<int> s3(a, a + 5);
+  phq::multiset<int> s4(a, a + 5);
+  phq::multiset<int> s5(s3);
+  phq::multiset<int> s6(std::move(s3));
+  phq::multiset<int> s7;
+  s7 = s4;
+  phq::multiset<int> s8;
+  s8 = std::move(s4);
+  phq::multiset<int> s9{ 1,2,3,4,5 };
+  phq::multiset<int> s10;
+  s10 = { 1,2,3,4,5 };
 
+  for (int i = 5; i > 0; --i)
+  {
+    FUN_AFTER(s1, s1.emplace(i));
+  }
+  FUN_AFTER(s1, s1.emplace_hint(s1.begin(), 0));
+  FUN_AFTER(s1, s1.erase(s1.begin()));
+  FUN_AFTER(s1, s1.erase(0));
+  FUN_AFTER(s1, s1.erase(1));
+  FUN_AFTER(s1, s1.erase(s1.begin(), s1.end()));
+  for (int i = 0; i < 5; ++i)
+  {
+    FUN_AFTER(s1, s1.insert(i));
+  }
+  FUN_AFTER(s1, s1.insert(a, a + 5));
+  FUN_AFTER(s1, s1.insert(5));
+  FUN_AFTER(s1, s1.insert(s1.end(), 5));
+  FUN_VALUE(s1.count(5));
+  FUN_VALUE(*s1.find(3));
+  FUN_VALUE(*s1.lower_bound(3));
+  FUN_VALUE(*s1.upper_bound(3));
+  auto first = *s1.equal_range(3).first;
+  auto second = *s1.equal_range(3).second;
+  std::cout << " s1.equal_range(3) : from " << first << " to " << second << std::endl;
+  FUN_AFTER(s1, s1.erase(s1.begin()));
+  FUN_AFTER(s1, s1.erase(1));
+  FUN_AFTER(s1, s1.erase(s1.begin(), s1.find(3)));
+  FUN_AFTER(s1, s1.clear());
+  FUN_AFTER(s1, s1.swap(s5));
+  FUN_VALUE(*s1.begin());
+  FUN_VALUE(*s1.rbegin());
+  std::cout << std::boolalpha;
+  FUN_VALUE(s1.empty());
+  std::cout << std::noboolalpha;
+  FUN_VALUE(s1.size());
+  FUN_VALUE(s1.max_size());
+  PASSED;
+#if PERFORMANCE_TEST_ON
+  std::cout << "[--------------------- Performance Testing ---------------------]" << std::endl;
+  std::cout << "|---------------------|-------------|-------------|-------------|" << std::endl;
+  std::cout << "|       emplace       |";
+#if LARGER_TEST_DATA_ON
+  CON_TEST_P1(multiset<int>, emplace, rand(), SCALE_M(LEN1), SCALE_M(LEN2), SCALE_M(LEN3));
+#else
+  CON_TEST_P1(multiset<int>, emplace, rand(), SCALE_S(LEN1), SCALE_S(LEN2), SCALE_S(LEN3));
+#endif
+  std::cout << std::endl;
+  std::cout << "|---------------------|-------------|-------------|-------------|" << std::endl;
+  PASSED;
+#endif
+  std::cout << "[---------------- End container test : multiset ----------------]" << std::endl;
+}
 
-} // namespace queue_test
+} // namespace set_test
 } // namespace test
 } // namespace phq
 
@@ -136,11 +183,5 @@ void queue_test()
 
 
 int main() {
-  phq::rb_tree<int, std::less<int>> r;
-  for (int i = 1000; i >= 0; --i) {
-    r.insert_unique(i);
-  }
-  for (auto it = r.begin(); it != r.end(); ++it) {
-    cout << *it << " ";
-  }
+  phq::test::set_test::multiset_test();
 }

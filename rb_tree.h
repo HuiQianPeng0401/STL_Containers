@@ -320,6 +320,7 @@ void rb_tree_rotate_left(NodePtr x, NodePtr &root) noexcept {
     if (y->left != nullptr) {
         y->left->parent = x;
     }
+    y->parent = x->parent;
     if (x == root) {
         root = y;
     } else if(rb_tree_is_lchild(x)) {
@@ -690,7 +691,7 @@ public:
     const_iterator find(const key_type &key) const;
     size_type count_multi(const key_type &key) const {
         auto p = equal_range_multi(key);
-        return static_cast<size_type>(phq::distance(p.first, p.last));
+        return static_cast<size_type>(phq::distance(p.first, p.second));
     }
     size_type count_unique(const key_type &key) const {
         return find(key) != end() ? 1 : 0;
@@ -836,7 +837,7 @@ rb_tree<T, Compare>::emplace_unique_use_hint(iterator hint, Args &&...args) {
             return insert_node_at(pos.first.first, np, pos.first.second);
         }
     } else if(hint == end()) {
-        if (key_comp_(value_traits::get_key(rightmost()->get_node_ptr()->value))) {
+        if (key_comp_(value_traits::get_key(rightmost()->get_node_ptr()->value), key)) {
             return insert_node_at(rightmost(), np, false);
         } else {
             auto pos = get_insert_unique_pos(key);

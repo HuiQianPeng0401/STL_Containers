@@ -65,7 +65,8 @@
         "random": "cpp",
         "list": "cpp",
         "cstring": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "set": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled", // 格式化时调整include的顺序（按字母排序）
 }
