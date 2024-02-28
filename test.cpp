@@ -8,7 +8,7 @@
 #include "deque.h"
 #include <deque>
 #include "list.h"
-#include "test.h"
+#include "test/test.h"
 #include <stack>
 #include "stack.h"
 #include <queue>
@@ -18,6 +18,8 @@
 #include "queue.h"
 #include "map.h"
 #include <map>
+#include "hashtable.h"
+#include <unordered_set>
 
 using std::cin;
 using std::cout;
@@ -220,5 +222,12 @@ void multimap_test()
 
 
 int main() {
-  phq::test::map_test::multimap_test();
+  phq::hashtable<int, std::hash<int>, std::equal_to<int>> h(100);
+  //std::unordered_set<int> h;
+  for (int i = 4; i <= 55; ++i) {
+    h.insert_multi(i*43);
+  }
+  for (auto it = h.begin(); it != h.end(); ++it) {
+    cout << *it << " ";
+  }
 }
