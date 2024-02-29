@@ -1642,4 +1642,4 @@ namespace phq
     }
 
 } // namespace phq
-#endif // !MYTINYSTL_HASHTABLE_H_
+#endif //
